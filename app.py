@@ -43,8 +43,7 @@ def get_sorted_events():
 
 @app.route('/')
 def home():
-    # FIXED: Now properly includes home.html
-    return flask.render_template('layout.html',
+    return flask.render_template('base.html',
                                  active_tab='home',
                                  content_template='home.html')
 
@@ -72,7 +71,7 @@ def calendar_view(year, month):
         next_month = 1
         next_year += 1
 
-    return flask.render_template('layout.html',
+    return flask.render_template('base.html',
                                  active_tab='calendar',
                                  content_template='calendar.html',
                                  year=year,
@@ -89,7 +88,7 @@ def calendar_view(year, month):
 @app.route('/events')
 def events_list():
     sorted_events = get_sorted_events()
-    return flask.render_template('layout.html',
+    return flask.render_template('base.html',
                                  active_tab='events',
                                  content_template='events.html',
                                  events=sorted_events)
