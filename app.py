@@ -3,9 +3,12 @@ import datetime
 import calendar
 import json
 import os
+import pytz
 
 app = flask.Flask(__name__)
 JSON_FILE = 'events.json'
+
+pacific_tz = pytz.timezone('America/Los_Angeles')
 
 def load_events():
     if os.path.exists(JSON_FILE):
@@ -19,16 +22,18 @@ def save_events(events):
 
 @app.route('/')
 def index():
-    now = datetime.date.today()
+
+    now = datetime.datetime.now(pacific_tz).date()
     return flask.redirect(flask.url_for('calendar_view', year=now.year, month=now.month))
 
 @app.route('/calendar/<int:year>/<int:month>')
 def calendar_view(year, month):
     events = load_events()
     cal_matrix = calendar.monthcalendar(year, month)
-    today = datetime.date.today()
 
-    # Navigation
+    today = datetime.datetime.now(pacific_tz).date()
+
+    # Navigation logic
     prev_month = month - 1
     prev_year = year
     if prev_month == 0:
